@@ -4,9 +4,9 @@
 websites that include but are not limited to stack overflow, reddit, W3 Schools, 
 and Geeks For Geeks. Results are displayed in the users default web browser.
 
-### Recommended
+### Where to keep script
 
-`export PATH="/usr/local/bin:$PATH"`
+`/usr/local/bin`
 
 ### Extras
 
