@@ -41,7 +41,7 @@ class QR_Code_Generator:
     progress_bar.close()
     
   # takes a string and returns a snake_case version of it "Example Ssid" -> "example_ssid_wifi_qr_code.png"
-  def create_file_name(ssid) -> str:
+  def create_file_name(ssid: str) -> str:
     return ssid.replace(" ", "_").lower() + "_wifi_qr_code.png"
   
   # Takes a string from user input and returns the auth type. If empty, returns WPA2 as a default
