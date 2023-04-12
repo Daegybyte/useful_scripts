@@ -8,9 +8,8 @@ import pathlib
 class QR_Code_Generator:
   def generate():
     # Get the SSID and password from the user
-    # comment out line 13 and uncomment line 12 to hide password when being entered
     ssid = input("SSID: ")
-    # password = getpass.getpass("Enter the password: ")
+    # password = getpass.getpass("Password: ")
     password = input("Password: ")
     
     # Create a progress bar to show the status of the QR code generation
@@ -20,7 +19,7 @@ class QR_Code_Generator:
     qr_data = f"WIFI:T:WPA2;S:{ssid};P:{password};;"
   
     # convert the ssid to snake_case for the output file
-    file_name = QR_Code_Generator.to_snake_case(ssid)
+    file_name = QR_Code_Generator.create_file_name(ssid)
     
     try:    
         # Save the QR code as a PNG file to the desktop
@@ -38,7 +37,7 @@ class QR_Code_Generator:
     progress_bar.close()
     
   # takes a string and returns a snake_case version of it "Example Ssid" -> "example_ssid
-  def to_snake_case(ssid) -> str:
+  def create_file_name(ssid) -> str:
     return ssid.replace(" ", "_").lower() + "_wifi_qr_code.png"
 
 if __name__ == "__main__":
