@@ -15,16 +15,16 @@ class QR_Code_Generator:
     # get the auth type from user input
     auth_type = QR_Code_Generator.get_auth_type(input("Authorisation Type (WPA2, etc): "))
     
-    # Create a progress bar to show the status of the QR code generation
-    progress_bar = tqdm(desc="Generating QR code", total=1)
-
     # Generate the QR code data string
     qr_data = f"WIFI:T:{auth_type};S:{ssid};P:{password};;"
-    print(qr_data)
+    print(f"QR data string: {qr_data}")
     
     # convert the ssid to snake_case for the output file
     file_name = QR_Code_Generator.create_file_name(ssid)
     
+    # Create a progress bar to show the status of the QR code generation
+    progress_bar = tqdm(desc="Generating QR code", total=1)
+
     try:    
         # Save the QR code as a PNG file to the desktop
         path = pathlib.Path.home() / "Desktop" / f"{file_name}"
