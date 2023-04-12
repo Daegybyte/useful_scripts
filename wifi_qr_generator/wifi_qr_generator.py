@@ -40,7 +40,7 @@ class QR_Code_Generator:
     progress_bar.update(1)
     progress_bar.close()
     
-  # takes a string and returns a snake_case version of it "Example Ssid" -> "example_ssid
+  # takes a string and returns a snake_case version of it "Example Ssid" -> "example_ssid_wifi_qr_code.png"
   def create_file_name(ssid) -> str:
     return ssid.replace(" ", "_").lower() + "_wifi_qr_code.png"
   
