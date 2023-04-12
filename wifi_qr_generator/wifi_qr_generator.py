@@ -22,8 +22,8 @@ class QR_Code_Generator:
     # convert the ssid to snake_case for the output file
     file_name = QR_Code_Generator.to_snake_case(ssid)
     
-    # Save the QR code as a PNG file to the desktop
-    try:
+    try:    
+        # Save the QR code as a PNG file to the desktop
         path = pathlib.Path.home() / "Desktop" / f"{file_name}"
         qrcode.make(qr_data).save(f"{path}")
     except FileNotFoundError:        
