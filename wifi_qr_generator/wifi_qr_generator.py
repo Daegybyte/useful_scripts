@@ -13,7 +13,7 @@ class QR_Code_Generator:
     # password = getpass.getpass("Password: ")
     password = input("Password: ")
     # get the auth type from user input
-    auth_type = QR_Code_Generator.get_auth_type(input("WPA/WPA2: "))
+    auth_type = QR_Code_Generator.get_auth_type(input("Authorisation Type (WPA2, etc): "))
     
     # Create a progress bar to show the status of the QR code generation
     progress_bar = tqdm(desc="Generating QR code", total=1)
