@@ -24,11 +24,12 @@ class QR_Code_Generator:
     
     # Create a progress bar to show the status of the QR code generation
     progress_bar = tqdm(desc="Generating QR code", total=1)
-
+    
+    # Save the QR code as a PNG file to the desktop
+    path = pathlib.Path.home() / "Desktop" / f"{file_name}"
     try:    
-        # Save the QR code as a PNG file to the desktop
-        path = pathlib.Path.home() / "Desktop" / f"{file_name}"
-        qrcode.make(qr_data).save(f"{path}")
+        with open(path, 'wb') as qr_code_file: # open the file in binary mode, w might cause data loss
+            qrcode.make(qr_data).save(qr_code_file)
     except FileNotFoundError:        
         print("Error: Path does not exist.")
     except PermissionError:
