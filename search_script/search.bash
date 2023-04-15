@@ -1,13 +1,15 @@
 #!/bin/bash
 
+
+all_sites=false
 # Parse command line options
 while getopts ":a" opt; do
   case "${opt}" in
     a)
       all_sites=true
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
+      ;; #;; Is used to indicate that the case statement is complete.
+    \?) 
+      echo "Invalid option: -$OPTARG" >&2 # >&2 is used to redirect the output to the standard error stream.
       exit 1
       ;;
   esac
@@ -15,14 +17,15 @@ done
 shift $((OPTIND -1))
 
 # Get the search query from the command line arguments
-query="$@"
+query="$@" # $@ is used to get all the command line arguments.
 
 # Construct the search URL
-if [ "$all_sites" = true ]; then
-  url="https://www.google.com/search?q=$query"
-else
-  
-url="https://www.google.com/search?q=$query+site:github.com+OR+site:w3schools.com+OR+site:stackoverflow.com+OR+site:medium.com+OR+site:reddit.com+OR+site:youtube.com+OR+site:geeksforgeeks.org"
+url="https://www.google.com/search?q=$query"
+if [ "$all_sites" != true ]; then
+  # Define the array of sites
+  sites=("github.com" "w3schools.com" "stackoverflow.com" "medium.com" "reddit.com" "youtube.com" "geeksforgeeks.org")
+  url+=$(printf "+site:%s" "${sites[@]}") # Append the sites to the URL
+  url=${url// /+OR+} # Replace spaces with +OR+
 fi
 
 # Open the search URL in the default browser
