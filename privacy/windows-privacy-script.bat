@@ -3760,7 +3760,7 @@ PowerShell -ExecutionPolicy Unrestricted -Command "$message = 'This script will 
 
 
 :: Pause the script to view the final state
-pause
+:: pause
 :: Restore previous environment settings
 endlocal
 :: Exit the script successfully
