@@ -79,8 +79,7 @@ To have the script run automatically on every reboot with system-level access:
 
 1. Open **Task Scheduler**
 2. Find the task in the library
-3. Check **Last Run Result** — `0x0` means success
-4. For detailed logs, go to **Properties → History tab**
+3. For detailed logs, go to **Properties → History tab**
 
 > If History is blank, enable it via **View → Enable All Tasks History** in Task Scheduler.
 
