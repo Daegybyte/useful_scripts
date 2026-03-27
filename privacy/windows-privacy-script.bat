@@ -3759,6 +3759,14 @@ PowerShell -ExecutionPolicy Unrestricted -Command "$message = 'This script will 
 :: ----------------------------------------------------------
 
 
+:: ----------------------------------------------------------
+:: ----------------------Disable Recall----------------------
+:: ----------------------------------------------------------
+echo --- Disable Recall
+:: Set the registry value: "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot!DisableAIDataAnalysis"
+PowerShell -ExecutionPolicy Unrestricted -Command "$registryPath = 'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot'; $data =  '1'; reg add 'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot' /v 'DisableAIDataAnalysis' /t 'REG_DWORD' /d "^""$data"^"" /f"
+:: ----------------------------------------------------------
+
 :: Pause the script to view the final state
 :: pause
 :: Restore previous environment settings
