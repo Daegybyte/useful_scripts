@@ -4422,6 +4422,7 @@ if exist "%USERPROFILE%\Pictures\Screenshots\" (
 ) else (
     echo Screenshots folder not found, skipping.
 )
+:: ----------------------------------------------------------
 
 :: Pause the script to view the final state
 :: pause
