@@ -4412,6 +4412,17 @@ PowerShell -ExecutionPolicy Unrestricted -Command "$keyPath='HKLM\SOFTWARE\Micro
 :: ----------------------------------------------------------
 
 
+:: ----------------------------------------------------------
+:: --------------------Remove Screenshots--------------------
+:: ----------------------------------------------------------
+echo --- Clear Screenshots folder ---
+if exist "%USERPROFILE%\Pictures\Screenshots\" (
+    del /q "%USERPROFILE%\Pictures\Screenshots\*"
+    echo Screenshots cleared.
+) else (
+    echo Screenshots folder not found, skipping.
+)
+
 :: Pause the script to view the final state
 :: pause
 :: Restore previous environment settings
