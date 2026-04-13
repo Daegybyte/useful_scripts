@@ -5,19 +5,20 @@
 set -euo pipefail
 
 LOCK="/tmp/compress-show-recursive.lock"
-[ -f "$LOCK" ] && { echo "Already running (lock: $LOCK). Exiting."; exit 1; }
+if [ -f "$LOCK" ]; then
+    echo "Already running (lock: $LOCK). Exiting."
+    exit 1
+fi
 touch "$LOCK"
 trap "rm -f '$LOCK'" EXIT
 
 TARGET_DIR="$(realpath "${1:-.}")"
 LOG_DIR="$HOME/logs"
 LOG="$LOG_DIR/compress_show_recursive_$(date +%Y%m%d_%H%M%S).log"
-
-
 mkdir -p "$LOG_DIR"
 
 # Clean up logs older than 30 days
-find "$LOG_DIR" -name "compress_show_recursive_*.log" -mtime +30 -delete
+find "$LOG_DIR" -name "compress_show_recursive_*.log" -mtime +30 -delete 2>/dev/null || true
 
 log() { echo "$1" | tee -a "$LOG"; }
 
@@ -31,28 +32,36 @@ while IFS= read -r -d '' input; do
     codec=$(ffprobe -v error \
         -select_streams v:0 \
         -show_entries stream=codec_name \
-        -of csv=p=0 "$input" 2>/dev/null)
+        -of csv=p=0 "$input" 2>/dev/null) || true
 
     if [[ "$codec" == "hevc" ]]; then
         log "Skipping (already H.265): $base"
         continue
     fi
 
+    if [[ -z "$codec" ]]; then
+        log "Skipping (could not read codec): $base"
+        continue
+    fi
+
     tmp="${input%.mkv}._tmp.mkv"
     log "Encoding: $base"
 
-    if ffmpeg -y -hide_banner -loglevel error \
+    ffmpeg -nostdin -y -hide_banner -loglevel error \
         -i "$input" \
         -map 0 \
-        -c:v libx265 -crf 24 -preset slow \
+        -c:v libx265 -crf 24 -preset medium \
         -c:a copy \
         -c:s copy \
-        "$tmp"; then
+        "$tmp" || true
 
+    ffmpeg_exit=$?
+
+    if [[ $ffmpeg_exit -eq 0 && -s "$tmp" ]]; then
         orig_size=$(stat -c%s "$input")
         new_size=$(stat -c%s "$tmp")
 
-        if [[ -s "$tmp" && $new_size -lt $orig_size ]]; then
+        if [[ $new_size -lt $orig_size ]]; then
             rm "$input"
             mv "$tmp" "$input"
             log "  Done: $base ($(( orig_size / 1024 / 1024 ))MB → $(( new_size / 1024 / 1024 ))MB)"
@@ -62,7 +71,7 @@ while IFS= read -r -d '' input; do
         fi
     else
         rm -f "$tmp"
-        log "  FAILED — kept original: $base"
+        log "  FAILED (exit $ffmpeg_exit) — kept original: $base"
     fi
 
     log ""
@@ -70,4 +79,3 @@ while IFS= read -r -d '' input; do
 done < <(find "$TARGET_DIR" -type f -iname "*.mkv" -print0 | sort -z)
 
 log "Finished — $(date)"
-
