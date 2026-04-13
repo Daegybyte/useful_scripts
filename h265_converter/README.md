@@ -65,6 +65,6 @@ Encoding settings are hardcoded in the script:
 |---------|-------|-------|
 | Codec | libx265 | H.265/HEVC |
 | CRF | 24 | Lower = better quality, larger file |
-| Preset | slow | Better compression, slower encode |
+| Preset | medium | Better compression, slower encode |
 | Audio | copy | Original audio kept as-is |
 | Subtitles | copy | All subtitle tracks preserved |
