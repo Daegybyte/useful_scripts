@@ -21,14 +21,16 @@ shift $((OPTIND -1))
 
 # Get the search query from the command line arguments
 query="$@" # $@ is used to get all the command line arguments.
-
-# Construct the search URL
-url="https://www.google.com/search?q=$query"
+query_encoded=${query// /+} # Replace spaces in the query with + for URL encoding
+url="https://www.google.com/search?q=$query_encoded"
 if [ "$all_sites" == false ]; then
   # Define the array of sites
   sites=("github.com" "w3schools.com" "stackoverflow.com" "medium.com" "reddit.com" "youtube.com" "geeksforgeeks.org")
-  url+=$(printf "+site:%s" "${sites[@]}") # Append the sites to the URL with +site: prefix for each site
-  url=${url// /+OR+} # Replace spaces with +OR+
+  site_filter="" # Will hold the "+OR+site:X" clauses for each site
+  for site in "${sites[@]}"; do
+    site_filter+="+OR+site:$site" # Append each site with +OR+ prefix
+  done # end of for loop
+  url+="+($site_filter)" # Append the grouped site filters to the URL
 fi # end of if statement
 
 # Open the search URL in the default browser
